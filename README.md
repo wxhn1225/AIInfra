@@ -116,7 +116,7 @@ AI集群云原生篇：容器技术、K8S编排、AI云平台与任务调度，�
 | 5      | [输出采样](./05Infer/05OutputSamp) | 推理输出采样的基础方法、加速策略与MOE推理优化 |
 | 6      | [大模型压缩](./05Infer/06CompDistill) | 低精度量化、知识蒸馏与高效推理优化解析 |
 | 7      | [推理框架架构](./05Infer/07Framework) | 主流推理框架vLLM、SGLang等核心技术与部署实践 |
-| 8      | [DeepSeek 开源](./05Infer/08DeepSeekOptimize) | DeepSeek推理FlashMLA、DeepEP与高效算子加速解析 |
+| 8      | [DeepSeek 开源](./05Infer/08DeepSeek) | DeepSeek推理FlashMLA、DeepEP与高效算子加速解析 |
 
 
 ### **[06. 大模型算法与数据](./06AlgoData/)**
