@@ -129,7 +129,7 @@ html_theme_options = {
     "icon_links": [
         {
             "name": "GitHub",
-            "url": "https://github.com/chenzomi12/AIInfra",
+            "url": "https://github.com/Infrasys-AI/AIInfra",
             "icon": "fa-brands fa-github",
         }, {
             "name": "Youtube",

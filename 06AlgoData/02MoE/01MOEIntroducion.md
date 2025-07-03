@@ -1,6 +1,8 @@
-<!--Copyright © ZOMI 适用于[License](https://github.com/chenzomi12/AIInfra)版权许可-->
+<!--Copyright © ZOMI 适用于[License](https://github.com/Infrasys-AI/AIInfra)版权许可-->
 
 # MoE 算法架构
+
+Author by: 张晓天
 
 **MoE（Mixture of Experts，混合专家）**，这绝非一个全新的概念，它的思想甚至可以追溯到几十年前。近年来，它随着 Mixtral 8x7B 的推出，在开源人工智能社区又引起了关注。但真正让它在大模型时代大放异彩、成为突破“成本-性能”瓶颈关键钥匙的，是国内幻方团队推出的DeepSeek V3 和 R1 模型。
 
