@@ -50,9 +50,9 @@ $$ \text{Att}_2 = \text{softmaxed}(q_2 k_1^T) \cdot v_1 + \text{softmaxed}(q_2 k
 然后我们计算出了token"l",然后我们下一步输入"l",这个时候attention计算公式为:
 $$ \text{Att}_3 = \text{softmaxed}(q_3 k_1^T) \cdot v_1 + \text{softmaxed}(q_3 k_2^T) \cdot v_2 + \text{softmaxed}(q_3 k_3^T) \cdot v_3$$
 
-通过上述步骤可以看到，每一次计算当前token的attention都需要之前所有token的K/V,为了能够计算这些k/v值,当我们不采取任何优化措施时，我们需要将之前的token也作为输入，这样才能够计算得到我们需要的attention，实际计算如下所示:
+通过上述步骤可以看到，每一次计算当前token的attention都需要之前所有token的K/V,为了能够计算这些k/v值,当我们不采取任何优化措施时，我们需要将之前的token也作为输入，这样才能够计算得到我们需要的attention，实际计算如下所示，其中$\theta$代之softmax计算后的结果。
 
-【todo】without cache的计算示意图
+![without cache计算示意图](./images/01KVCache01.jpg)
 
 我们可以看到这种计算模式导致总计算复杂度与生成序列长度$T$的平方成正比$O(T^2)$，这样的复杂度是不能忍受的。
 
@@ -63,11 +63,9 @@ $$ \text{Att}_3 = \text{softmaxed}(q_3 k_1^T) \cdot v_1 + \text{softmaxed}(q_3 k
 
 
 ## KV Cache原理
-因为有了上一节的分析，我们知道了每个token decode阶段具体需要用到哪些东西，由于大模型的推理是Masked Self-Attention 每个token只能够看到其之前的token信息，因此相关当我们输入第一个token的时候，k1 v1计算之后就是确定的，之后计算新的attention的时候，前面计算的key和value值并不会改变，我们自然想到直接将之前计算出的key和value向量缓存。
+因为有了上一节的分析，我们知道了每个token decode阶段具体需要用到哪些东西，由于大模型的推理是Masked Self-Attention 每个token只能够看到其之前的token信息，因此当我们输入第$t$个token的时候，$K_t$，$V_t$计算之后就是确定的，之后计算新的attention的时候，前面计算的key和value值并不会改变，我们自然想到直接将之前计算出的key和value向量缓存。
 
-我们以第3个token为例，当我们缓存了之前的K与V 之后，$\text{Att}_k$ 计算只与当前的qk有关，因此，只需要将当前的token输入，那么attention矩阵计算变成了如下的流程：
-
-【todo】 with Cache的计算示意图
+我们以第3个token为例，当我们缓存了之前的K与V 之后，$\text{Att}_t$ 计算只与当前的 $Q_t$ 有关，因此，只需要将当前的token输入，那么attention矩阵计算变成了如下的流程：![with cache计算示意图](./images/01KVCache02.jpg)
 
 我们可以清楚的看到与没有KV Cache相比,我们只需要输入当前的token,然后利用缓存的KV就可以完成KV的计算
 
