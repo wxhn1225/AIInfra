@@ -17,8 +17,8 @@
 | 集合通信原理 | 03 集合通信操作/原语/算子 | [PPT](./03CCPrimtive.pdf), [视频](https://www.bilibili.com/video/BV1gS411K7k5) |
 | 集合通信原理 | 04 AI 对集合通信算法诉求 | [PPT](./04CCAlgorithm.pdf), [视频](https://www.bilibili.com/video/BV1g7421d7bN) |
 | 集合通信原理 | 05 大模型集合通信算法细节 | [PPT](./04CCAlgorithm.pdf), [视频](https://www.bilibili.com/video/BV1fm421G7KK) |
-| 集合通信原理 | 06 通信域与PyTorch实现 | [PPT](./05PyTorchCC.pdf), [视频](https://www.bilibili.com/video/BV1VZ421g7jY) |
-| 集合通信原理 | 07 AI芯片内互联技术 | [PPT](./06CCInChip.pdf), [视频](https://www.bilibili.com/video/BV1jy411z7tg) |
+| 集合通信原理 | 06 通信域与 PyTorch 实现 | [PPT](./05PyTorchCC.pdf), [视频](https://www.bilibili.com/video/BV1VZ421g7jY) |
+| 集合通信原理 | 07 AI 芯片内互联技术 | [PPT](./06CCInChip.pdf), [视频](https://www.bilibili.com/video/BV1jy411z7tg) |
 | 集合通信原理 | 08 大模型集群互联技术 | [PPT](./07CCCluster.pdf), [视频](https://www.bilibili.com/video/BV1Wz421q7SV) |
 
 ## 备注

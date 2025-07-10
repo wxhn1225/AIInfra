@@ -1,14 +1,14 @@
 # 单机单卡 MoE
 
-解读 by [AI布道Mr.Jin]
+解读 by [AI 布道 Mr.Jin]
 
-其实在DeepSeek-R1爆火之前，DeepSeek V2在我们行业就已经妇孺皆知了，它独特的MOE结构值得研究一下。这篇文章是基于 ZOMI酱 的这个视频写的：《使用昇腾NPU手撕MoE单机版代码！没想到如此简单！》。
+其实在 DeepSeek-R1 爆火之前，DeepSeek V2 在我们行业就已经妇孺皆知了，它独特的 MOE 结构值得研究一下。这篇文章是基于 ZOMI 酱 的这个视频写的：《使用昇腾 NPU 手撕 MoE 单机版代码！没想到如此简单！》。
 
-通过《09MOECore解读》，我们知道了MOE的结构原理是什么样的，接下来看一下代码上是怎么实现的！
+通过《09MOECore 解读》，我们知道了 MOE 的结构原理是什么样的，接下来看一下代码上是怎么实现的！
 
-## MOE计算代码
+## MOE 计算代码
 
-下面是zomi酱课程中提供的完整代码：
+下面是 zomi 酱课程中提供的完整代码：
 
 
 ```python
@@ -132,19 +132,19 @@ if __name__ == "__main__":
 
 ### 初始化函数定义
 
-首先，定义了Expert类，也就是“专家”，可以看到，专家是由线性层和激活函数构成的简单模型。
+首先，定义了 Expert 类，也就是“专家”，可以看到，专家是由线性层和激活函数构成的简单模型。
 
-然后开始定义MOE类。在初始化函数中，定义了这样几个变量：
+然后开始定义 MOE 类。在初始化函数中，定义了这样几个变量：
 
 self.num_experts：专家的数量，也就是上面提到的“并列线性层”的个数，训练后的每个专家的权重都是不同的，代表它们所掌握的“知识”是不同的。
 
-self.top_k：每个输入token激活的专家数量。
+self.top_k：每个输入 token 激活的专家数量。
 
-self.expert_capacity：代表计算每组token时，每个专家能被选择的最多次数。
+self.expert_capacity：代表计算每组 token 时，每个专家能被选择的最多次数。
 
 self.gate：路由网络，一般是一个线性层，用来计算每个专家被选择的概率。
 
-self.experts：实例化Expert类，生成多个专家。
+self.experts：实例化 Expert 类，生成多个专家。
 
 
 ```python
@@ -160,9 +160,9 @@ experts = nn.ModuleList(
 
 ### 前向计算逻辑
 
-接下来看一下forward函数。
+接下来看一下 forward 函数。
 
-首先是输入x，shape是（batch_size, input_dim），batch_size我们可以看作是token的数量，也就是序列长度。然后通过self.gate和softmax计算每个token在每个专家上的激活概率：
+首先是输入 x，shape 是（batch_size, input_dim），batch_size 我们可以看作是 token 的数量，也就是序列长度。然后通过 self.gate 和 softmax 计算每个 token 在每个专家上的激活概率：
 
 
 ```python
@@ -184,9 +184,9 @@ print("probs: ", probs)
            grad_fn=<SoftmaxBackward0>)
     
 
-probs的打印结果如上：我们设置的batch_size是10，num_experts是8，所以probs是个10行8列的矩阵。
+probs 的打印结果如上：我们设置的 batch_size 是 10，num_experts 是 8，所以 probs 是个 10 行 8 列的矩阵。
 
-接着，再用topk算子把每个token的激活专家选出来：
+接着，再用 topk 算子把每个 token 的激活专家选出来：
 
 
 ```python
@@ -217,17 +217,17 @@ print("topk_indices: ", topk_indices)
             [6, 4, 7]])
     
 
-topk_probs和topk_indices 的打印结果如上，因为我们设置的top_k=3，所以每个token都把排名前三的概率选出来了，同时topk_indices把这些概率对应的专家编号也选出来了。
+topk_probs 和 topk_indices 的打印结果如上，因为我们设置的 top_k=3，所以每个 token 都把排名前三的概率选出来了，同时 topk_indices 把这些概率对应的专家编号也选出来了。
 
-self.training分支对应的是训练过程中计算损失函数的部分，我们后面再讲。
+self.training 分支对应的是训练过程中计算损失函数的部分，我们后面再讲。
 
-选择好专家后，就要开始计算了。计算规则是，对于每个token，假如它选择的专家是e1、e2、e3，概率分别是p1、p2、p3，那么这个token的计算结果就是p1xe1_out+p2xe2_out+p3xe3_out。
+选择好专家后，就要开始计算了。计算规则是，对于每个 token，假如它选择的专家是 e1、e2、e3，概率分别是 p1、p2、p3，那么这个 token 的计算结果就是 p1xe1_out+p2xe2_out+p3xe3_out。
 
-由于计算个体是每个专家，所以代码中用for循环遍历每个专家。我们以第0个专家为例，看看它的计算过程是怎样的。
+由于计算个体是每个专家，所以代码中用 for 循环遍历每个专家。我们以第 0 个专家为例，看看它的计算过程是怎样的。
 
-首先需要确定0号专家的输入。由于不是每个token都选择了0号专家，所以不能把x直接作为输入，而是要确定一个下标向量idxes，把x[idxes]作为0号专家的输入，idxes的值就是激活了0号专家的所有token编号，那么怎么得到idxes呢？代码里面是这样做的：
+首先需要确定 0 号专家的输入。由于不是每个 token 都选择了 0 号专家，所以不能把 x 直接作为输入，而是要确定一个下标向量 idxes，把 x[idxes]作为 0 号专家的输入，idxes 的值就是激活了 0 号专家的所有 token 编号，那么怎么得到 idxes 呢？代码里面是这样做的：
 
-首先计算一个mask（假设expert_idx=0）：
+首先计算一个 mask（假设 expert_idx=0）：
 
 
 ```python
@@ -242,9 +242,9 @@ print(expert_mask)
             False, False, False, False, False, False, False, False, False, False])
     
 
-flat_indices是topk_indices平铺之后的向量。通过对比，可以看到expert_mask中True的位置和topk_indices中0的位置铺平之后是一致的，代表第0个专家被第4个和第5个token激活了。
+flat_indices 是 topk_indices 平铺之后的向量。通过对比，可以看到 expert_mask 中 True 的位置和 topk_indices 中 0 的位置铺平之后是一致的，代表第 0 个专家被第 4 个和第 5 个 token 激活了。
 
-而且expert_mask代表的含义是：只要它的第0-2的位置是True的话，就代表被第0个token激活了，只要它的第3-5的位置是True的话，就代表被第1个token激活了，以此类推，我们可以声明一个sample_indices向量：
+而且 expert_mask 代表的含义是：只要它的第 0-2 的位置是 True 的话，就代表被第 0 个 token 激活了，只要它的第 3-5 的位置是 True 的话，就代表被第 1 个 token 激活了，以此类推，我们可以声明一个 sample_indices 向量：
 
 
 ```python
@@ -256,7 +256,7 @@ print(sample_indices)
             8, 8, 8, 9, 9, 9])
     
 
-再通过下面的代码就可以把idxes取出来了：
+再通过下面的代码就可以把 idxes 取出来了：
 
 
 ```python
@@ -299,7 +299,7 @@ expert_output = experts[expert_idx](expert_input)
 weighted_output = expert_output * expert_weights.unsqueeze(-1)
 ```
 
-最后还需要把计算结果叠加到对应的token上面去：
+最后还需要把计算结果叠加到对应的 token 上面去：
 
 
 ```python
@@ -333,11 +333,11 @@ outputs.index_add_(0, expert_samples, weighted_output)
 
 
 
-完成上面的for循环之后，就把所有专家的计算任务完成了，通过index_add_的操作，把每个token的计算结果也汇总了。
+完成上面的 for 循环之后，就把所有专家的计算任务完成了，通过 index_add_的操作，把每个 token 的计算结果也汇总了。
 
 ### 损失函数
 
-损失函数包含2部分：专家利用率均衡和样本分配均衡。
+损失函数包含 2 部分：专家利用率均衡和样本分配均衡。
 
 首先是专家利用率均衡，如果每个专家被选择的概率相近，那么说明分配越均衡，损失函数越小：
 
@@ -346,7 +346,7 @@ importance = probs.sum(0)
 importance_loss = torch.var(importance) / (self.num_experts ** 2)
 ```
 
-然后是样本分配均衡，首先得到每个token、每个专家的分配概率矩阵：
+然后是样本分配均衡，首先得到每个 token、每个专家的分配概率矩阵：
 
 ```
 mask = torch.zeros_like(probs, dtype=torch.bool)
@@ -354,7 +354,7 @@ mask.scatter_(1, topk_indices, True)
 routing_probs = probs * mask
 ```
 
-然后按照token维度（样本维度）求平均，得到每个专家被分配的token平均数量和平均概率：
+然后按照 token 维度（样本维度）求平均，得到每个专家被分配的 token 平均数量和平均概率：
 
 ```
 expert_usage = mask.float().mean(0)
@@ -367,7 +367,7 @@ routing_weights = routing_probs.mean
 load_balance_loss = self.num_experts * (expert_usage * routing_weights).sum()
 ```
 
-样本分配越均衡，这个损失函数越小。举个例子，10个专家，10个样本，如果所有样本都分到1个专家，那么损失函数值为10x1+0+0...+0=10，如果平均分给10个专家，那么损失函数值为1x0.1+1x0.1+...+1x0.1=1。
+样本分配越均衡，这个损失函数越小。举个例子，10 个专家，10 个样本，如果所有样本都分到 1 个专家，那么损失函数值为 10x1+0+0...+0=10，如果平均分给 10 个专家，那么损失函数值为 1x0.1+1x0.1+...+1x0.1=1。
 
 ## 本节视频
 

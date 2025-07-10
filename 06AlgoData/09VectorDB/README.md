@@ -10,10 +10,10 @@
 
 | 大纲 | 小节 | 链接 |
 |:--- |:---- |:-------------------- |
-| 向量数据库 | 01 Vector和Embedding关系  | [PPT](./01Intrudction.pdf), [视频](https://www.bilibili.com/video/BV1JF4m177Wd) |
+| 向量数据库 | 01 Vector 和 Embedding 关系  | [PPT](./01Intrudction.pdf), [视频](https://www.bilibili.com/video/BV1JF4m177Wd) |
 | 向量数据库 | 02 向量数据库基本原理 | [PPT](./02VectorDB.pdf), [视频](https://www.bilibili.com/video/BV1mv421C7uW) |
 | 向量数据库 | 03 向量数据库的混合搜索系统 | [PPT](./03Foundation.pdf), [视频](https://www.bilibili.com/video/BV1pj421X7TH) |
-| 向量数据库 | 04 RAG技术、遇见大模型 | [PPT](./04SimilarSearchI.pdf), [视频](https://www.bilibili.com/video/BV1yu4m1P7UA) |
+| 向量数据库 | 04 RAG 技术、遇见大模型 | [PPT](./04SimilarSearchI.pdf), [视频](https://www.bilibili.com/video/BV1yu4m1P7UA) |
 | 向量数据库 | 05 相似性搜索概述 | [PPT](./05SimilarSearchII.pdf), [视频](https://www.bilibili.com/video/BV1UH4y1h79F) |
 | 向量数据库 | 06 ANN、IVF、HNSW 算法 | [PPT](./06SimilarMeasure.pdf), [视频](https://www.bilibili.com/video/BV1ap421d7Hf) |
 | 向量数据库 | 07 LSH、PQ、ISV-PQ 算法 | [PPT](./06SimilarMeasure.pdf), [视频](https://www.bilibili.com/video/BV1c6421g7Xr) |

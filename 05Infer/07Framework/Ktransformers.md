@@ -4,47 +4,47 @@
 
 
 
-## 2. MLA算子的矩阵吸收优化
+## 2. MLA 算子的矩阵吸收优化
 
-Multi-head Latent Attention（MLA）是DeepSeek V2中提出的一种Attention变体，其核心思想是，不直接存储完整的、与序列长度线性增长的KV Cache，而是通过一个**可学习的低秩投影**，将历史的Key和Value信息**压缩**成一个尺寸更小、更紧凑的“潜在缓存”（Latent Cache）。而MLA算子，从其计算特征来看，同时解决了这两方面的问题：一方面，通过低秩压缩大幅降低了KV Cache的大小，另一方面，MLA解压缩后的多头注意力机制能够提供较高的计算强度，有助于充分利用GPU的算力资源。很明显，MLA算子是针对现代GPU硬件特点“量体裁衣”定制的一个注意力机制，通过对存储和计算的再平衡，能够充分发挥现代GPU的各项优势。
+Multi-head Latent Attention（MLA）是 DeepSeek V2 中提出的一种 Attention 变体，其核心思想是，不直接存储完整的、与序列长度线性增长的 KV Cache，而是通过一个**可学习的低秩投影**，将历史的 Key 和 Value 信息**压缩**成一个尺寸更小、更紧凑的“潜在缓存”（Latent Cache）。而 MLA 算子，从其计算特征来看，同时解决了这两方面的问题：一方面，通过低秩压缩大幅降低了 KV Cache 的大小，另一方面，MLA 解压缩后的多头注意力机制能够提供较高的计算强度，有助于充分利用 GPU 的算力资源。很明显，MLA 算子是针对现代 GPU 硬件特点“量体裁衣”定制的一个注意力机制，通过对存储和计算的再平衡，能够充分发挥现代 GPU 的各项优势。
 
-### 2.1. MLA的计算过程
+### 2.1. MLA 的计算过程
 
-以Deepseek V2为例，假如给定一个输入向量$h_t \in \mathbb{R}^{B \times L \times 5120}$，其中$B$为batch size，$L$为sequence length，5120是DeepSeek V2中的特征向量维度，MLA的计算过程如下。**这里补一张MLA计算流程图**
+以 Deepseek V2 为例，假如给定一个输入向量 $h_t \in \mathbb{R}^{B \times L \times 5120}$，其中 $B$ 为 batch size，$L$ 为 sequence length，5120 是 DeepSeek V2 中的特征向量维度，MLA 的计算过程如下。**这里补一张 MLA 计算流程图**
 
 #### 2.1.1. Query
 
-在DeepSeek-V2中，Query也采用了低秩压缩的方式。首先，将输入向量投影到一个1536维的低维空间：
+在 DeepSeek-V2 中，Query 也采用了低秩压缩的方式。首先，将输入向量投影到一个 1536 维的低维空间：
 
 $$ c_t^Q = W^{DQ} h_t \in \mathbb{R}^{B \times L \times 1536} $$
 
-然后，将其投影到$\mathbb{R}^{H \times 128}$的多头向量空间上（其中$H=128$是heads数），得到了Q向量的第一部分：
+然后，将其投影到 $\mathbb{R}^{H \times 128}$ 的多头向量空间上（其中 $H=128$ 是 heads 数），得到了 Q 向量的第一部分：
 
 $$ q_t^C = W^{UQ} c_t^Q \in \mathbb{R}^{B \times L \times H \times 128} $$
 
-再将其投影到$\mathbb{R}^{H \times 64}$上并使用RoPE嵌入位置信息，得到Q向量的第二部分：
+再将其投影到 $\mathbb{R}^{H \times 64}$ 上并使用 RoPE 嵌入位置信息，得到 Q 向量的第二部分：
 
 $$ q_t^R = \mathrm{RoPE}(W^{QR} c_t^Q) \in \mathbb{R}^{B \times L \times H \times 64} $$
 
-将两部分拼接的到最终的Q向量：
+将两部分拼接的到最终的 Q 向量：
 
 $$ q_t = [q_t^C, q_t^R] \in \mathbb{R}^{B \times L \times H \times 192} $$
 
-#### 2.1.2. Key和Value
+#### 2.1.2. Key 和 Value
 
-计算KV向量时，首先需要将输入向量投影为512维的联合压缩表示：
+计算 KV 向量时，首先需要将输入向量投影为 512 维的联合压缩表示：
 
 $$ c_t^{KV} = W^{DKV} h_t \in \mathbb{R}^{B \times L \times 512} $$
 
-与Query的计算过程类似，Key的第一部分是将$c_t^{KV}$通过投影解压缩到$\mathbb{R}^{H \times 128}$的多头向量空间：
+与 Query 的计算过程类似，Key 的第一部分是将 $c_t^{KV}$ 通过投影解压缩到 $\mathbb{R}^{H \times 128}$ 的多头向量空间：
 
 $$ k_t^C = W^{UK} c_t^{KV} \in \mathbb{R}^{B \times L \times H \times 128} $$
 
-Key的第二部分是将输入向量投影到64维向量空间并施加RoPE嵌入位置信息：
+Key 的第二部分是将输入向量投影到 64 维向量空间并施加 RoPE 嵌入位置信息：
 
 $$ k_t^R = \mathrm{RoPE}(W^{KR} h_t) \in \mathbb{R}^{B \times L \times 64} $$
 
-与Query不同的是，完整的Key是将Key的第二部分广播到每个head后与第一部分拼接得到：
+与 Query 不同的是，完整的 Key 是将 Key 的第二部分广播到每个 head 后与第一部分拼接得到：
 $$
 k_t = \begin{bmatrix}
 
@@ -56,15 +56,15 @@ k_t = \begin{bmatrix}
 
 ​    \end{bmatrix} \in \mathbb{R}^{B \times L \times H \times 192}
 $$
-也就是说，每个head的RoPE部分是完全相同的，这是MLA中Key共享位置编码的设计。
+也就是说，每个 head 的 RoPE 部分是完全相同的，这是 MLA 中 Key 共享位置编码的设计。
 
-Value向量的计算较为简单，直接将$c_t^{KV}$解压缩到$\mathbb{R}^{H \times 128}$即可：
+Value 向量的计算较为简单，直接将 $c_t^{KV}$ 解压缩到 $\mathbb{R}^{H \times 128}$ 即可：
 
 $$ v_t = W^{UV} c_t^{KV} \in \mathbb{R}^{B \times L \times H \times 128} $$
 
 #### 2.1.3. Attention
 
-Attention的计算过程和传统的MHA并无差异。首先计算attention score：
+Attention 的计算过程和传统的 MHA 并无差异。首先计算 attention score：
 $$
 a = \mathrm{softmax}\left(\frac{q_t^\top k_t + \mathrm{Mask}}{\sqrt{192}}\right) = 
 
@@ -72,11 +72,11 @@ a = \mathrm{softmax}\left(\frac{q_t^\top k_t + \mathrm{Mask}}{\sqrt{192}}\right)
 
 \in \mathbb{R}^{B \times L \times H \times L}
 $$
-计算对V的加权和，并将所有head压平，得到Attention输出：
+计算对 V 的加权和，并将所有 head 压平，得到 Attention 输出：
 
 $$ o = a \cdot v_t \in \mathbb{R}^{B \times L \times H \times 128} \cong \mathbb{R}^{B \times L \times 16384} $$
 
-经过另一个矩阵的投影，就能得到MLA的最终输出：
+经过另一个矩阵的投影，就能得到 MLA 的最终输出：
 
 $$ u = W^O o \in \mathbb{R}^{B \times L \times 5120} $$
 
@@ -85,7 +85,7 @@ $$ u = W^O o \in \mathbb{R}^{B \times L \times 5120} $$
 def forward(...):
     bsz, q_len, _ = hidden_states.size()
     
-    # 计算Q：先降维再升维，好处是相比直接使用大小为 [5120, 24576] 的矩阵
+    # 计算 Q：先降维再升维，好处是相比直接使用大小为 [5120, 24576] 的矩阵
     # [5120, 1536] * [1536, 24576] 这样的低秩分解在存储空间和计算量上都大幅度降低
     q = self.q_b_proj(self.q_a_layernorm(self.q_a_proj(hidden_states)))
     q = q.view(bsz, q_len, self.num_heads, self.q_head_dim).transpose(1, 2)
@@ -94,10 +94,10 @@ def forward(...):
         q, [self.qk_nope_head_dim, self.qk_rope_head_dim], dim=-1
     )
     
-    # 计算KV
+    # 计算 KV
     # 一个优化的 MLA KVCache 实现只需要缓存这个 compressed_kv 就行，不过后面实际上展开了
     compressed_kv = self.kv_a_proj_with_mqa(hidden_states)
-    # 此处compressed_kv 对应公式中的 c_t^{KV}
+    # 此处 compressed_kv 对应公式中的 c_t^{KV}
     compressed_kv, k_pe = torch.split(
         compressed_kv, [self.kv_lora_rank, self.qk_rope_head_dim], dim=-1
     )
@@ -136,23 +136,23 @@ def forward(...):
 
 ### 2.2. Cache Compress
 
-相比于缓存KV，缓存c更能够节省显存
+相比于缓存 KV，缓存 c 更能够节省显存
 
 
 
 ### 2.3. Projection Absorption
 
-上述分析和实验结果表明，相比缓存完整的KV Cache，缓存压缩后的KV Cache会带来较大的性能下降。另外一个重要的问题是，当前的CacheCompressed实现实际上并不能缓解KV Cache过大的问题，这是由于在计算MLA的时候，仍然需要存储解压后的完整的KV Cache，这很可能引起内存溢出（Out of Memory, OOM）崩溃。
+上述分析和实验结果表明，相比缓存完整的 KV Cache，缓存压缩后的 KV Cache 会带来较大的性能下降。另外一个重要的问题是，当前的 CacheCompressed 实现实际上并不能缓解 KV Cache 过大的问题，这是由于在计算 MLA 的时候，仍然需要存储解压后的完整的 KV Cache，这很可能引起内存溢出（Out of Memory, OOM）崩溃。
 
-所幸DeepSeek-V2的论文中提出，可以将KV的解压缩矩阵吸收到Q-projection和Out-projection中，从而可以在不解压缩KV Cache的情况下直接计算最终的Attention结果。
+所幸 DeepSeek-V2 的论文中提出，可以将 KV 的解压缩矩阵吸收到 Q-projection 和 Out-projection 中，从而可以在不解压缩 KV Cache 的情况下直接计算最终的 Attention 结果。
 
-对于K的吸收，在Attention Score的计算公式中，非RoPE部分可以做如下展开：
+对于 K 的吸收，在 Attention Score 的计算公式中，非 RoPE 部分可以做如下展开：
 $$
 {q_t^C}^\top k_t^C = (W^{UQ} c_t^Q)^{\top} W^{UK} c_t^{KV} = {c_t^Q}^{\top}{W^{UQ}}^{\top} W^{UK} c_t^{KV} = ({c_t^Q}^{\top}{W^{UQ}}^{\top} W^{UK}) c_t^{KV}
 $$
-即通过矩阵乘法结合律，可以改为计算$({c_t^Q}^{\top}{W^{UQ}}^{\top} W^{UK})$，避免了解压缩出完整的K矩阵。此外，在原始版本的解压缩的过程中，由于每个token的key都需要与$W^{UK}$相乘才能得到，因此计算量较大；矩阵吸收后，$W^{UK}$只需要对$q_t^C$这一个向量相乘，也大大减少了浮点计算量。
+即通过矩阵乘法结合律，可以改为计算 $({c_t^Q}^{\top}{W^{UQ}}^{\top} W^{UK})$，避免了解压缩出完整的 K 矩阵。此外，在原始版本的解压缩的过程中，由于每个 token 的 key 都需要与 $W^{UK}$ 相乘才能得到，因此计算量较大；矩阵吸收后，$W^{UK}$ 只需要对 $q_t^C$ 这一个向量相乘，也大大减少了浮点计算量。
 
-对于V的吸收，情况稍微复杂。为表述的清楚性，我们采用Einstein求和约定描述该过程：
+对于 V 的吸收，情况稍微复杂。为表述的清楚性，我们采用 Einstein 求和约定描述该过程：
 
 ``` python
 v_t = einsum('hdc,blc->blhd', W_UV, c_t_KV) *# (1)*
@@ -188,7 +188,7 @@ def forward(hidden_states_q: torch.Tensor, q_position_ids: torch.LongTensor, com
     
     qk_head_dim = self.kv_lora_rank + self.qk_rope_head_dim
     query_states = k_pe.new_empty(bsz, self.num_heads, q_len, qk_head_dim)
-    # 此处改变了q_nope的计算顺序
+    # 此处改变了 q_nope 的计算顺序
     query_states[:, :, :, : self.kv_lora_rank] = torch.einsum('hdc,bhid->bhic', q_absorb, q_nope)
     query_states[:, :, :, self.kv_lora_rank :] = q_pe
     
@@ -197,7 +197,7 @@ def forward(hidden_states_q: torch.Tensor, q_position_ids: torch.LongTensor, com
     attn_weights = nn.functional.softmax(
         attn_weights, dim=-1, dtype=torch.float32
     ).to(q_nope.dtype)
-    # 此处改变了attn_output的计算顺序
+    # 此处改变了 attn_output 的计算顺序
     attn_output = torch.einsum('bhql,blc->bhqc', attn_weights, compressed_kv)
     attn_output = torch.einsum('bhqc,hdc->bhqd', attn_output, out_absorb)
 
@@ -214,10 +214,10 @@ def forward(hidden_states_q: torch.Tensor, q_position_ids: torch.LongTensor, com
 
 ### 2.4. Move Elision
 
-由于Key中存在多头共享旋转位置编码（RoPE）的设计，而在DeepSeek V2源代码中存在RePE和No RoPE矩阵的广播和拼接操作，这会导致大量的显存浪费。因此采用Move Elision（移动省略）节省显存
+由于 Key 中存在多头共享旋转位置编码（RoPE）的设计，而在 DeepSeek V2 源代码中存在 RePE 和 No RoPE 矩阵的广播和拼接操作，这会导致大量的显存浪费。因此采用 Move Elision（移动省略）节省显存
 
 
-不过，这样还不能完全发挥出MLA的威力。在原始代码中，query_states和key_states会通过拼接RoPE和非RoPE部分得到：
+不过，这样还不能完全发挥出 MLA 的威力。在原始代码中，query_states 和 key_states 会通过拼接 RoPE 和非 RoPE 部分得到：
 ``` python
 def forward(...):
     ...
@@ -230,8 +230,8 @@ def forward(...):
     key_states[:, :, :, self.qk_nope_head_dim :] = k_pe
     ...
 ```
-当我们采取了上述优化后，此处的拼接过程会产生大量无用的数据拷贝和广播，同时也会占用大量显存空间导致OOM。为此，我们采用MoveElision优化策略，
-即省略此处的拼接RoPE部分和非RoPE部分的过程，而是直接分别计算量部分的额Attention Score并相加（考虑$q_t^\top k_t = {q_t^C}^\top k_t^C + {q_t^R}^\top k_t^R$）：
+当我们采取了上述优化后，此处的拼接过程会产生大量无用的数据拷贝和广播，同时也会占用大量显存空间导致 OOM。为此，我们采用 MoveElision 优化策略，
+即省略此处的拼接 RoPE 部分和非 RoPE 部分的过程，而是直接分别计算量部分的额 Attention Score 并相加（考虑 $q_t^\top k_t = {q_t^C}^\top k_t^C + {q_t^R}^\top k_t^R$）：
 ``` python
 # Absorbed_CacheCompressed_MoveElision
 def forward(...):
@@ -252,7 +252,7 @@ def forward(...):
     ...
 ```
 
-## 3. 基于cuda graph的调用优化
+## 3. 基于 cuda graph 的调用优化
 
 
 
@@ -260,9 +260,9 @@ def forward(...):
 
 
 
-## 5. CPU的优化
+## 5. CPU 的优化
 
-### 5.1. GGUF格式文件
+### 5.1. GGUF 格式文件
 
 [资料来源][GGUF]
 
@@ -318,15 +318,15 @@ GGUF 遵循 `<基础名称><尺寸标签><微调><版本><编码><类型><分片
 
 ![gguf](asset/gguf.png)
 
-### 5.3. AMX后端
+### 5.3. AMX 后端
 
-AMX与AVX-512的区别
+AMX 与 AVX-512 的区别
 
 ![amx_intro](asset/amx_intro.png)
 
 
 
-ktransformers用多级缓存加速activation和weight
+ktransformers 用多级缓存加速 activation 和 weight
 
 ![amx](asset/amx.png)
 
