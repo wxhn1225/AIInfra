@@ -208,5 +208,3 @@ https://www.witintech.com/upfiles/202312051029031006456460.pdf
 https://pdf.dfcfw.com/pdf/H3_AP202307091592122354_1.pdf 
 https://www.dell.com/support/contents/zh-cn/article/product-support/self-support-knowledgebase/data-storage-backup-and-recovery/support-for-hard-disk-drive
 https://aws.amazon.com/cn/compare/the-difference-between-ssd-hard-drive/
-https://zhuanlan.zhihu.com/p/19502234910
-https://blocksandfiles.com/2025/02/26/weka-vast-data-and-tokenomics/
