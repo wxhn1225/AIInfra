@@ -99,7 +99,7 @@ Reduce 的**规约**操作包含：SUM、MIN、MAX、PROD、LOR 等类型的规�
 
 ### Gather
 
-Gather 操作是将多个 Rank 上的数据收集到Rank 上。Gather 可以理解为反向的 Scatter。
+Gather 操作是将多个 Rank 上的数据收集到 Rank 上。Gather 可以理解为反向的 Scatter。
 
 ![03CCPrimtive08](images/03CCPrimtive08.png)
 
@@ -111,7 +111,7 @@ Gather 操作是将多个 Rank 上的数据收集到Rank 上。Gather 可以理�
 
 ### All-Reduce
 
-All-Reduce 操作是在所有 Rank 执行相同Reduce 操作，然后将所有 Rank 数据规约运算得到的结果发送到所有 Rank。
+All-Reduce 操作是在所有 Rank 执行相同 Reduce 操作，然后将所有 Rank 数据规约运算得到的结果发送到所有 Rank。
 
 ![03CCPrimtive09](images/03CCPrimtive09.png)
 
@@ -185,7 +185,7 @@ All to All 操作是对 All-Gather 的扩展，但不同的节点向某一节点
 
 在学习了本章内容后，我们对集合通信原语有了更加深入的理解：
 
-1. 了解集合式通信的3种不同方式
+1. 了解集合式通信的 3 种不同方式
 2. 了解一对多 Scatter/Broadcast，多对一 Gather/Reduce，多对多具体方式
 3. 了解多对多可以由一对多和多对一的方式组合
 

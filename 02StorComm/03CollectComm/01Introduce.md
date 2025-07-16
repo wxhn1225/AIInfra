@@ -42,12 +42,12 @@ Author by: SingularityKChen
 
 这一部分内容将介绍芯片内 die 间互联的硬件组成及其发展趋势，以及一个服务器（1U）内通信相关硬件模块。
 
-下图是英伟达 DGX-2系统，其标注内容如下：
+下图是英伟达 DGX-2 系统，其标注内容如下：
 
 1. 16 个全连接的 Tesla V100 GPU 核心，构成 1.92 PFLOPS 的总算力、512 GB HBM2 显存；
 2. 双 GPU 基板互联（NVLINK Plane Card）；
-3. 12 组NVSwith，提供 2.4 TB/s 对分带宽；
-4. 8 路 EDR InfiniBand (IB) 或 100 GigE接口，提供 1600 Gb/s 的低延迟总双向带宽；
+3. 12 组 NVSwith，提供 2.4 TB/s 对分带宽；
+4. 8 路 EDR InfiniBand (IB) 或 100 GigE 接口，提供 1600 Gb/s 的低延迟总双向带宽；
 5. PCIe 交换机模块
 6. 2 块英特尔 Xeon Platinum CPU 芯片
 7. 1.5 TB 系统内存
@@ -58,7 +58,7 @@ Author by: SingularityKChen
 
 ### 组网-集群互联
 
-这部分内容将会介绍rank之间和集群之间的组网和集合通信相关内容。
+这部分内容将会介绍 rank 之间和集群之间的组网和集合通信相关内容。
 
 ![01Introduce03](images/01Introduce03.png)
 

@@ -4,7 +4,7 @@
 
 ###  高速互联：RDMA 基本概述
 
-（AI工作负载、RoCE、iWARP）
+（AI 工作负载、RoCE、iWARP）
 
 
 
@@ -37,17 +37,17 @@
 | 通信延迟     | 毫秒级                                | 微秒级                                 |
 | 常用编程接口 | Sockets API                           | Verbs API                              |
 
- RDMA技术的原理及其与TCP/IP架构的对比如下图所示。
+ RDMA 技术的原理及其与 TCP/IP 架构的对比如下图所示。
 
 <img src="./images/02RDMA00.jpg" style="zoom:50%;" />
 
 RDMA 技术主要包括：
 
 - IB（InfiniBand）：基于 InfiniBand 架构的 RDMA 技术，由 IBTA（InfiniBand Trade Association）提出。搭建基于 IB 技术的 RDMA 网络需要专用的 IB 网卡和 IB 交换机。
-- iWARP（Internet Wide Area RDMA Protocal）：基于 TCP/IP 协议的 RDMA 技术，由 IETF 标 准定义。iWARP 支持在标准以太网基础设施上使用 RDMA 技术，但服务器需要使用支持iWARP 的网卡。
-- RoCE（RDMA over Converged Ethernet）：基于以太网的 RDMA 技术，也是由 IBTA 提出。RoCE支持在标准以太网基础设施上使用RDMA技术，但是需要交换机支持无损以太网传输，需要服务器使用 RoCE 网卡。
+- iWARP（Internet Wide Area RDMA Protocal）：基于 TCP/IP 协议的 RDMA 技术，由 IETF 标 准定义。iWARP 支持在标准以太网基础设施上使用 RDMA 技术，但服务器需要使用支持 iWARP 的网卡。
+- RoCE（RDMA over Converged Ethernet）：基于以太网的 RDMA 技术，也是由 IBTA 提出。RoCE 支持在标准以太网基础设施上使用 RDMA 技术，但是需要交换机支持无损以太网传输，需要服务器使用 RoCE 网卡。
 
-####  **InfiniBand技术简介**
+####  **InfiniBand 技术简介**
 
  InfiniBand 是一种基于 InfiniBand 架构的 RDMA 技术，它提供了一种基于通道的点对点消息队列转发模型，每个应用都可通过创建的虚拟通道直接获取本应用的数据消息，无需其他操作系统及协议栈的介入。InfiniBand 架构的应用层采用了 RDMA 技术，可以提供远程节点间 RDMA 读写访问，完全卸载 CPU 工作负载；网络传输采用了高带宽的传输；链路层设置特定的重传机制保证服务质量，不需要数据缓冲。
 
@@ -59,7 +59,7 @@ RDMA 技术主要包括：
 
  iWARP 是基于以太网和 TCP/IP 协议的 RDMA 技术，可以运行在标准的以太网基础设施上。
 
- iWARP并没有指定物理层信息，所以能够工作在任何使用TCP/IP协议的网络上层。iWARP允许很多传输类型来共享相同的物理连接，如网络、I/O、文件系统、块存储和处理器之间的消息通讯。
+ iWARP 并没有指定物理层信息，所以能够工作在任何使用 TCP/IP 协议的网络上层。iWARP 允许很多传输类型来共享相同的物理连接，如网络、I/O、文件系统、块存储和处理器之间的消息通讯。
 
 ![](./images/02RDMA02.jpeg)
 
@@ -67,11 +67,11 @@ RDMA 技术主要包括：
 
 
 
- iWARP协议栈，iWARP 由 MPA、DDP、RDMAP 三层子协议组成： 
+ iWARP 协议栈，iWARP 由 MPA、DDP、RDMAP 三层子协议组成： 
 
-- RDMAP层协议负责 RDMA 读、写操作和 RDMA 消息的转换，并将 RDMA 消息转发到 DDP层。
-- DDP层协议负责将过长的 RDMA 消息分片分装成DDP数据包继续转发到 MPA 层。 
-- MPA层在 DDP 数据段的固定标识位置增加转发后向标识、数据报文的长度以及 CRC 校验数据等字段构成 MPA 数据段交由 TCP 传输。
+- RDMAP 层协议负责 RDMA 读、写操作和 RDMA 消息的转换，并将 RDMA 消息转发到 DDP 层。
+- DDP 层协议负责将过长的 RDMA 消息分片分装成 DDP 数据包继续转发到 MPA 层。 
+- MPA 层在 DDP 数据段的固定标识位置增加转发后向标识、数据报文的长度以及 CRC 校验数据等字段构成 MPA 数据段交由 TCP 传输。
 
  iWARP 技术特点，iWARP 从以下几个方面降低了主机侧网络负载：
 
@@ -85,7 +85,7 @@ RDMA 技术主要包括：
 
 
 
-####  RoCE技术简介
+####  RoCE 技术简介
 
 
 
@@ -95,9 +95,9 @@ RDMA 技术主要包括：
 
  RoCE 协议分为两个版本：
 
- RoCE v1协议：基于以太网承载 RDMA，只能部署于二层网络，它的报文结构是在原有的 IB架构的报文上增加二层以太网的报文头，通过 Ethertype 0x8915 标识 RoCE 报文。 
+ RoCE v1 协议：基于以太网承载 RDMA，只能部署于二层网络，它的报文结构是在原有的 IB 架构的报文上增加二层以太网的报文头，通过 Ethertype 0x8915 标识 RoCE 报文。 
 
- RoCE v2协议：基于 UDP/IP 协议承载 RDMA，可部署于三层网络，它的报文结构是在原有的 IB 架构的报文上增加 UDP 头、IP 头和二层以太网报文头，通过 UDP 目的端口号 4791 标 识 RoCE 报文。RoCE v2 支持基于源端口号 hash，采用 ECMP 实现负载分担，提高了网络的利用率。
+ RoCE v2 协议：基于 UDP/IP 协议承载 RDMA，可部署于三层网络，它的报文结构是在原有的 IB 架构的报文上增加 UDP 头、IP 头和二层以太网报文头，通过 UDP 目的端口号 4791 标 识 RoCE 报文。RoCE v2 支持基于源端口号 hash，采用 ECMP 实现负载分担，提高了网络的利用率。
 
  RoCE 使得基于以太网的数据传输能够：
 
