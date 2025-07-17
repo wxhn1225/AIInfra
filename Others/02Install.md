@@ -1,4 +1,4 @@
-<!--Copyright © ZOMI 适用于[License](https://github.com/chenzomi12/AIInfra)版权许可-->
+<!--Copyright © ZOMI 适用于[License](https://github.com/Infrasys-AI/AIInfra)版权许可-->
 
 # 本地部署
 
@@ -28,7 +28,7 @@ html_theme = "sphinx_book_theme"
 
 ## 写入内容与图片
 
-因为《大模型系统》的内容都存放在 https://github.com/chenzomi12/AIInfra/ 地址上，因此需要通过 github desktop 或者 git clone http 的方式拉取下来到本地。
+因为《大模型系统》的内容都存放在 https://github.com/Infrasys-AI/AIInfra/ 地址上，因此需要通过 github desktop 或者 git clone http 的方式拉取下来到本地。
 
 > 因为网络不稳定的问题，建议翻墙或者直接使用 github desktop 软件应用下载，使其支持断点下载项目。
 
@@ -168,7 +168,7 @@ html_theme_options = {
     "icon_links": [
         {
             "name": "GitHub",
-            "url": "https://github.com/chenzomi12/AIInfra",
+            "url": "https://github.com/Infrasys-AI/AIInfra",
             "icon": "fa-brands fa-github",
         }, {
             "name": "Youtube",

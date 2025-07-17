@@ -137,7 +137,7 @@ if __name__ == "__main__":
             output, loss = moe(x)
             print(f"Using device: {x.device}")
             print(f"Training output shape: {output.shape}")      # torch.Size([64, 256])
-            print(f"Training auxiliary loss: {loss.item():.4f}")     # 示例值，如0.1234
+            print(f"Training auxiliary loss: {loss.item():.4f}")     # 示例值，如 0.1234
             prof.step()
 
     print("=" * 80)
