@@ -1,6 +1,6 @@
 <!--Copyright 适用于[License](https://github.com/chenzomi12/AIInfra)版权许可-->
 
-# GPU与NPU精度误差
+# GPU 与 NPU 精度误差
 
 ## 硬件浮点运算如何引入误差
 
