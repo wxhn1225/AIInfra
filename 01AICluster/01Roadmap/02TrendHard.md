@@ -13,8 +13,6 @@ Author by: 陈悦孜
 - 高性能存储器：从容量扩展到存算协同。
 - 高性能服务器：从单机性能到绿色化集群。
 
-
-
 ## 高性能处理器
 
 ### CPU 主导时代
@@ -163,12 +161,11 @@ SSD（固态硬盘）是硬盘技术后起之秀，相比 HDD 具有明显的性
 
 ### 发展历程 2：分布式存储和新存储文件系统
 
-
 #### 分布式文件系统
 
 分布式文件系统（Distributed File System，DFS）是指文件系统管理的物理存储资源不一定直接连接在本地节点上，而是通过计算机网络与节点（可简单的理解为一台计算机）相连；或是若干不同的逻辑磁盘分区或卷标组合在一起而形成的完整的有层次的文件系统。DFS 为分布在网络上任意位置的资源提供一个逻辑上的树形文件系统结构，从而使用户访问分布在网络上的共享文件更加简便。Lustre、Ceph 等文件系统支撑 EB 级数据吞吐，比如 Lustre 带宽突破 1TB/s。
 
-#### AI 驱动存储优化 ：WekaIO、VAST Data 通过 NVMe-oF + RDMA 实现全闪存存储集群。
+#### AI 驱动存储优化 ：WekaIO、VAST Data 通过 NVMe-oF + RDMA 实现全闪存存储集群
 
 随着 LLM 的爆火，在训练和推理层面都对 Infra 提出新挑战，传统深度学习时代模型规模较小，猝存储上面临的都是小文件问题，对性能没有太多需求，而 LLM 动辄 100B 的参数量，在数据管道的各个阶段需要花费大量时间在不同系统之间复制数据，对 GPU 利用率较低的现象有很大影响，所以 AI 存储技术需要有新的进展。
 
@@ -182,12 +179,18 @@ SSD（固态硬盘）是硬盘技术后起之秀，相比 HDD 具有明显的性
 
 ![硬盘革命](images_src/02TrendHard19.png)
 
+### 高性能存储发展历程3：新存储技术革命
 
-### 高性能存储发展历程 3： 新存储技术革命
-#### SCM（存储级内存）：Intel Optane 持久内存试图弥合内存与存储间的性能鸿沟。
-#### HBM（高带宽内存）：NPU/GPU 高度集成与依赖， HBM3 每引脚数据速率提高到 6.4Gb/s，单设备带宽 819GB/s 。
+#### SCM（存储级内存）
+
+Intel Optane 持久内存试图弥合内存与存储间的性能鸿沟。
+
+#### HBM（高带宽内存）
+
+NPU/GPU 高度集成与依赖， HBM3 每引脚数据速率提高到 6.4Gb/s，单设备带宽 819GB/s。
 
 ### 高性能存储：近计算与层级优化
+
 1. 存储级内存 SCM：CXL 3.0 协议推动存储池化，实现 CPU/GPU 共享内存资源。
 2. HBM3e 与 HBM4​​：2025 年 HBM3 带宽突破 1TB/s，成 AI 芯片标配。
 3. 存算一体架构：计算单元嵌入存储层，减少数据搬运。
@@ -202,11 +205,11 @@ SSD（固态硬盘）是硬盘技术后起之秀，相比 HDD 具有明显的性
 <iframe src="https://player.bilibili.com/player.html?isOutside=true&aid=114767700172746&bvid=BV16A3wzEELU&cid=30765482532&p=1&as_wide=1&high_quality=1&danmaku=0&t=30&autoplay=0" width="100%" height="500" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 </html>
 
-
 ## reference
-https://www.witintech.com/upfiles/202312051029031006456460.pdf
-https://pdf.dfcfw.com/pdf/H3_AP202307091592122354_1.pdf 
-https://www.dell.com/support/contents/zh-cn/article/product-support/self-support-knowledgebase/data-storage-backup-and-recovery/support-for-hard-disk-drive
-https://aws.amazon.com/cn/compare/the-difference-between-ssd-hard-drive/
-https://zhuanlan.zhihu.com/p/19502234910
-https://blocksandfiles.com/2025/02/26/weka-vast-data-and-tokenomics/
+
+- https://www.witintech.com/upfiles/202312051029031006456460.pdf
+- https://pdf.dfcfw.com/pdf/H3_AP202307091592122354_1.pdf 
+- https://www.dell.com/support/contents/zh-cn/article/product-support/self-support-knowledgebase/data-storage-backup-and-recovery/support-for-hard-disk-drive
+- https://aws.amazon.com/cn/compare/the-difference-between-ssd-hard-drive/
+- https://zhuanlan.zhihu.com/p/19502234910
+- https://blocksandfiles.com/2025/02/26/weka-vast-data-and-tokenomics/
