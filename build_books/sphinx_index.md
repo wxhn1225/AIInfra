@@ -18,7 +18,7 @@ title: AIInfra
 
 本开源项目主要是跟大家一起探讨和学习人工智能、深度学习的系统设计，而整个系统是围绕着在 NVIDIA、ASCEND 等芯片厂商构建算力层面，所用到的、积累、梳理得到大模型系统全栈的内容。希望跟所有关注 AI 开源项目的好朋友一起探讨研究，共同促进学习讨论。
 
-![大模型系统全栈架构图](images/01Introduction/03Architecture03.png)
+![大模型系统全栈架构图](images/00Summary/000OverviewofArchitecture.png)
 
 # 课程内容大纲
 
