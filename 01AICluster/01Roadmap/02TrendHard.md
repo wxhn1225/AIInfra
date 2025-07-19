@@ -27,6 +27,8 @@ AMD Opteron系列第五代至强（Emerald Rapids）支持单 CPU 64 核心，�
 
 ![Intel Xeon和AMD Opteron](images/02TrendHard01.png)
 
+
+
 #### 主频提升达瓶颈
 
 2000 年代初，Intel Prescott 核心尝试通过 90nm 工艺提升主频，但功耗突破 100W，导致“高频低效”问题，最终转向多核架构随着工艺微缩接近物理极限，单核主频停滞在 3-4GHz 范围，性能增长转而依赖多核并行和指令级并行（ILP）优化。
@@ -40,6 +42,8 @@ Intel Xeon|	Xeon E5-2600 v4	|2016|	22|	2.2GHz|	超线程，AVX2 指令集|
 AMD Opteron|	Opteron 6166 HE|	2010|	12	|1.8GHz|	低功耗设计（65W）|
 Intel Xeon	|Xeon Platinum 8380	|2021|	40|	2.3GHz|	支持 PCIe 4.0，8 通道 DDR4|
 
+![Intel Xeon和AMD Opteron](images/02TrendHard02.png)
+
 #### 协处理器兴起
 
 协处理器是一种辅助处理器，设计用于与主 CPU 协同工作，专门处理特定类型的任务以提高系统整体性能。协处理器是计算机系统中与主处理器（CPU）配合工作的专用处理单元，它能够分担 CPU 的特定计算任务、提高特定类型运算的效率，并且优化系统整体性能。
@@ -52,7 +56,13 @@ Phi 3100|	57|	1 TFlops|	6 GB|	240 GB/s|	300W	|<=$2,000|
 Phi 5110P|	60|	1.01 TFlops|	8 GB|	320 GB/s|	225W|	$2,649|
 Phi 7120|	61|	1.2 TFlops|	16 GB|	352 GB/s	|300W|	$4,129|
 
+![PHI](images/02TrendHard03.png)
+
+
 ​​GPU 加速​​也属于协处理器范畴，NV CUDA 革命性地将 GPU 用于通用计算， Tesla 成为通用并行计算标杆。首代 Tesla 架构（如 G80）引入统一着色器设计，将矢量计算单元拆分为标量核心（CUDA Core），支持 C 语言编程，实现 SIMT（单指令多线程）执行模型，奠定通用计算基础，将 GPU 从图形协处理器升级为通用计算引擎，定义“CPU+GPU”异构标准。
+
+![Tesla](images/02TrendHard04.png)
+
 
 #### 国产 CPU 突破
 
@@ -62,10 +72,17 @@ Phi 7120|	61|	1.2 TFlops|	16 GB|	352 GB/s	|300W|	$4,129|
 
 搭载了超过 40,000 颗申威 SW26010 处理器的“神威·太湖之光”超级计算机，于 2016 年 6 月在全球超级计算机 TOP500 排行榜上震撼登顶，终结了美国超算长达 23 年的榜首垄断地位。它不仅以 93 PFlops（每秒 9.3 亿亿次）的 Linpack 实测持续性能创造了当时的世界纪录，更是全球首台突破 10 亿亿次/秒（100 PFlops）大关的超级计算机，标志着人类正式迈入百亿亿次计算时代（E 级超算时代） 的门槛。
 
+![申威 SW26010](images/02TrendHard05.png)
+
 #### Arm 高性能计算突破
 
 NVIDIA Grace CPU 实现内存子系统革新。​​LPDDR5X 和纠错码​​的设计使得能效提升 2 倍；CPU-GPU 一致性缓存的机制和​NVLink-C2C 直连使​​延迟降至 1/10。
+
+![NVIDIA Grace CPU](images/02TrendHard06.png)
+
 鲲鹏 920ARM-based 处理器采用 7nm 工艺，ARM 架构授权，华为自主设计。通过优化分支预测算法、提升运算单元数量、改进内存子系统架构等一系列微架构设计，提高处性能。
+
+![鲲鹏 920ARM-based 处理器](images/02TrendHard07.png)
 
 以下表格对比传统 Arm（移动端）和高性能计算优化版（服务器级）的架构对比。
 
@@ -125,6 +142,8 @@ Chiplet是一种先进的芯片设计和制造方法。Chiplet 即小芯粒，�
 
 另一方面大量的专有网络兴起。Myrinet、Quadrics 等私有协议网络出现，延迟~10μs，但生态封闭制约普及。专有网络，如 Myrinet 和 Quadrics，是高性能计算领域为突破传统以太网性能瓶颈而兴起的私有协议互连技术。其核心优势在于实现了~10 微秒级的极低通信延迟和高吞吐量，这得益于其精简的协议栈（绕过操作系统内核直接在网卡硬件处理通信）和定制的交换架构。然而，这些技术的生态高度封闭成为其致命短板：它们依赖专属的硬件（特定网卡、交换机）和私有软件栈（如专用通信库），导致成本高昂（远超商用以太网）、兼容性差、用户被厂商锁定且不同系统间互操作性困难。最终，这种封闭性严重制约了其普及和发展，在 2009 年前后，它们被更具开放性和成本效益的技术（如 InfiniBand 和基于以太网的 RDMA）所取代而退出主流市场。
 
+![Ethernet和Myrinet](images/02TrendHard09.png)
+
 ### 网络发展历程：主流技术成型（2010s 至今）
 
 这里介绍主流技术有 InfiniBand、RoCE 和 NVLink。
@@ -147,7 +166,10 @@ Chiplet是一种先进的芯片设计和制造方法。Chiplet 即小芯粒，�
 
 - 新互联协议面向异构计算与AI的专用优化。华为灵渠总线互联，实现 CPU2NPU、NPU2NPU 新一代的集群互联。传统的CPU间互联协议（如PCIe）在连接CPU与加速器（如GPU、NPU）或加速器之间的高效通信时，存在延迟、带宽和扩展性瓶颈，对于CPU与加速器或者加速器提速通信的需求，新互联协议成为新一代的集群互联技术。华为灵渠总线互联是一个典型的代表，是专门为 CPU-to-NPU 和 NPU-to-NPU 通信设计的新一代集群互联技术。它提供超高带宽、超低延迟的直接连接，显著优化大规模AI训练和推理集群中，异构计算单元（特别是海量NPU间）的数据交换效率。这类协议代表了网络技术与特定计算架构（如AI集群）的深度融合，通过硬件和协议层的协同设计，最大化整体计算效能。随着异构计算（CPU+GPU+NPU+其他加速器）成为主流，针对特定场景（尤其是AI）优化的专用高速互联协议将成为高性能网络发展的重要分支，与IB、以太网（RoCE）形成互补或竞争关系。
 
+图为谷歌推出的OCS（光学链路开关），光互连技术。
+
 ![高性能网络发展趋势](images/02TrendHard11.png)
+
 
 ## 高性能存储
 
@@ -333,10 +355,49 @@ P.S. PUE（Power Usage Effectiveness，电能使用效率） 是衡量数据中�
 
 #### 模块化设计 ：超算模块化机柜（比如Frontier）实现计算、存储、网络的灵活扩展。
 
+高性能服务器走向模块化，超算系统的模块化设计通过标准化机柜单元集成计算、存储、网络等核心组件，实现快速部署与弹性扩展。
+
+以Frontier超级计算机为例，其采用模块化机柜架构，每个机柜单元包含计算节点（AMD CPU+GPU）、液冷散热系统、分布式存储模块及高速互联网络（Slingshot-11互连），单个模块即可独立运行，74个机柜通过高速网络互联可以连接一起运行。
+
+Frontier超级计算机部署于美国能源部橡树岭国家实验室，由74个标准19英寸（48厘米）机柜组成，每个机柜重达8,000磅。系统采用高度集成的模块化设计，每个机柜配备64个刀片服务器，每个刀片包含2个计算节点，共计9,472个节点（部分资料显示为9,408个，差异源于统计口径）。每个计算节点配置：
+
+- CPU：1颗64核AMD EPYC 7453s（代号"Trento"）处理器，搭配512GB DDR4内存
+
+- GPU：4颗AMD Radeon Instinct MI250X加速卡
+
+总计算资源如下：
+
+- 606,208个CPU核心（或602,112个）
+
+- 8,335,360个GPU核心（或8,138,240个）
+
+- 内存系统：4.6 PB DDR4 + 4.6 PB HBM（每个GPU含128GB HBM）
+
+系统通过HPE Cray Slingshot-11高速网络互联，采用基于以太网的定制拓扑结构，实现CPU-GPU间高效协同。该设计体现了超算系统在模块化架构、异构计算与高密度集成方面的前沿水平。
+
+![Frontier超级计算机](images/02TrendHard27.jpeg)
+
 ### 未来趋势
+
+未来高性能服务器将呈现两大核心发展趋势：在散热技术方面，液冷技术正从实验性方案快速演进为标准配置；在系统架构方面，模块化整机柜设计变得流行，如曙光硅立方率先实现机柜级全浸没液冷方案，华为昇腾也推出Cloud Matrix超节点架构。这些创新技术共同推动高性能服务器向高效节能、智能集成的方向发展。
+
 #### 液冷普及：欧盟要求 2025 年后数据中心 PUE ≤ 1.3，液冷从实验走向标准方案。
 
+全球范围内，数据中心行业面临日益严格的能效和碳排要求。欧盟的《能效指令》要求到2030年数据中心PUE不超过1.3，中国"东数西算"工程对枢纽节点的PUE要求更为严格(≤1.2)。液冷凭借物理性散热优势（比风冷效率高1000倍）成为唯一达标路径，进而从边缘实验技术跃升为全球数据中心的新一代基础设施标准。Intel/AMD的部分商用服务器采用冷板式液冷；阿里云“麒麟”浸没液冷集群，谷歌AI数据中心采用浸没式液冷技术。
+
 #### 整机柜设计：曙光硅立方实现机柜级液冷，昇腾推出 Cloud Matrix 超节点。
+
+整机柜设计是数据中心技术演进的核心方向，它通过系统级整合大幅提升算力密度与能效。
+
+曙光硅立方单机柜整合计算、冷却、供电单元，支持300kW制冷能力，采用浸没相变液冷技术，将计算部件整体浸入液态冷媒中，实现PUE值低至1.04，单机柜功率密度达160kW，较传统风冷提升4-5倍。曙光硅立方呈现独特的“硅立方”形态，采用层次化、模块化、立体化的创新设计，大幅节省物理空间。
+
+![曙光硅立方](images/02TrendHard26.jpeg)
+
+华为昇腾384超节点，首创将384颗昇腾NPU和192颗鲲鹏CPU通过全新高速网络MatrixLink全对等互联，形成一台超级“AI服务器”，单卡推理吞吐量跃升到2300 Tokens/s。在高速互联总线联接下，昇腾384超节点共由12个计算柜和4个总线柜构成，是目前业界最大规模的超节点，算力总规模达300Pflops，网络互联总带宽达269TB/s，内存总带宽达1229TB/s，通过最佳负载均衡组网等方案，未来可以支撑更大规模的模型演进。
+
+![华为昇腾384超节点](images/02TrendHard18.jpg)
+
+
 
 ## 本节视频
 
@@ -347,14 +408,40 @@ P.S. PUE（Power Usage Effectiveness，电能使用效率） 是衡量数据中�
 
 ## reference
 https://www.witintech.com/upfiles/202312051029031006456460.pdf
+
 https://pdf.dfcfw.com/pdf/H3_AP202307091592122354_1.pdf 
+
 https://www.dell.com/support/contents/zh-cn/article/product-support/self-support-knowledgebase/data-storage-backup-and-recovery/support-for-hard-disk-drive
+
 https://aws.amazon.com/cn/compare/the-difference-between-ssd-hard-drive/
+
 https://post.smzdm.com/p/a90el8pp/
+
 https://zhuanlan.zhihu.com/p/23269431888
+
 https://zhuanlan.zhihu.com/p/597784274
+
 https://server.51cto.com/article/143125.html
+
 https://dataenergy.sugon.com/c48283.jsp
+
 https://dataenergy.sugon.com/c81871.jsp
+
 https://mp.weixin.qq.com/s/ZVklrCPV7oNHvfcJpnPdJA
+
 https://developer.aliyun.com/article/74471
+
+https://www.eet-china.com/mp/a135747.html
+
+https://zh.wikipedia.org/wiki/%E5%89%8D%E6%B2%BF_(%E8%B6%85%E7%B4%9A%E9%9B%BB%E8%85%A6)
+
+https://www.baogaobox.com/insights/250602000011116.html
+
+https://server.zol.com.cn/731/7319835.html
+
+https://baike.baidu.com/item/%E7%A1%85%E7%AB%8B%E6%96%B9/24229490?anchor=1&fragment=1#1
+
+https://www.sohu.com/a/915158063_115479?scm=10001.325_13-325_13.0.0.5_32
+
+https://www.jiuyangongshe.com/a/2g6hckcy8nz
+
