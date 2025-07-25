@@ -76,7 +76,7 @@ Author by：杨小珑
 
   - 有着大量且稳定的开发者，作者基本为在读博士生，在 github 上的 Star 仅次于 llama.cpp，但 Contributors 是所有推理框架中最多的。因此 vLLM 对于模型的支持以及功能特性都是最完善的。
   - 社区活跃度最高，github 上 issue 和 pr 都很多。大量 paper 都是以 vLLM 作为 baseline 来开发 demo，因此各种新技术的引入 vLLM 是具有更大优势的。
-  - 基础的各种优化以及进阶的权重量化、kv 压缩、speculate decode、chunked prefill、promot cache、constrained decoding 等功能都是完备的。
+  - 基础的各种优化以及进阶的权重量化、kv 压缩、speculate decode、chunked prefill、prompt cache、constrained decoding 等功能都是完备的。
 
 ### SGLang
 
