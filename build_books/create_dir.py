@@ -56,7 +56,7 @@ def add2readme(file_path, string):
 			file.write(string)
 
 
-def change_iamgepath_markdown(file_path):
+def change_imagepath_markdown(file_path):
 	"""
 	change ![ENIAC01](images/01CPUBase01.png)
 	to ![ENIAC01](../images/02Hardware02ChipBase/01CPUBase01.png)
@@ -120,7 +120,7 @@ def get_subfile(path, dir_path):
 	for file in file_path:
 		fp = os.path.join(dir_path, file)
 		add2readme(fp, temp)
-		change_iamgepath_markdown(fp)
+		change_imagepath_markdown(fp)
 
 	print("now we are going to move PDF: ", target_pdf_filenames)
 	for filename in target_pdf_filenames:
@@ -135,30 +135,42 @@ def getallfile(path):
 	# 遍历该文件夹下的所有目录或者文件
 	for file in file_path:
 		fp = os.path.join(path, file)
-		if os.path.isdir(fp):
+		if os.path.isdir(fp) and fp.split('/')[-1] != "images":
 			file_dist = fp.split('/')
 			new_dir_name = ''.join(file_dist[-2:])
 			new_path = create_dir(dir_paths, new_dir_name)
 			if new_path:
 				get_subfile(fp, new_path)
+				
+		elif os.path.isdir(fp) and fp.split('/')[-1] == "images":
+			file_dist = fp.split('/')
+			save_path = dir_paths +"images"+ file_dist[-2]+"/"
+			os.makedirs(save_path, exist_ok=True)
+			shutil.copytree(fp, save_path, dirs_exist_ok = True)
 
 		elif os.path.isfile(fp):
 			# 遍历 md 文件，并复制到指定目录
 			if check_markdown(fp):
 				new_dir_name = fp.split('/')[-2]
-				new_path = create_dir(dir_paths, new_dir_name)
+				
+				print("fp:",fp,new_dir_name,fp)
+				new_path = dir_paths+"/"+new_dir_name
+				os.makedirs(new_path, exist_ok=True)
 				shutil.copy(fp, new_path)
+				# 修改image目录
+				change_imagepath_markdown(new_path+"/"+os.path.basename(fp))
 
-
-target_dir0 = '/Users/a1-6/Workspaces/AIInfer/00Summary'
-target_dir1 = '/Users/a1-6/Workspaces/AIInfer/01AICluster'
-target_dir2 = '/Users/a1-6/Workspaces/AIInfer/02StorComm'
-target_dir3 = '/Users/a1-6/Workspaces/AIInfer/03DockCloud'
-target_dir4 = '/Users/a1-6/Workspaces/AIInfer/04Train'
-target_dir5 = '/Users/a1-6/Workspaces/AIInfer/05Infer'
-target_dir6 = '/Users/a1-6/Workspaces/AIInfer/06AlgoData'
-target_dir7 = '/Users/a1-6/Workspaces/AIInfer/07Application'
-dir_paths = '/Users/a1-6/Workspaces/aiinfra_BOOK/source/'
+# target_dir1 = '/home/< 主机用户名 >/< 目录 >/< 从网络拉取的总文件夹名称 >/01AICluster'
+# 用户在本地编译时按照如上方式更改路径名称。以下为博主个人所配置路径。
+target_dir0 = '/home/gecko/1.Workshop/aiinfra/00Summary'
+target_dir1 = '/home/gecko/1.Workshop/aiinfra/01AICluster'
+target_dir2 = '/home/gecko/1.Workshop/aiinfra/02StorComm'
+target_dir3 = '/home/gecko/1.Workshop/aiinfra/03DockCloud'
+target_dir4 = '/home/gecko/1.Workshop/aiinfra/04Train'
+target_dir5 = '/home/gecko/1.Workshop/aiinfra/05Infer'
+target_dir6 = '/home/gecko/1.Workshop/aiinfra/06AlgoData'
+target_dir7 = '/home/gecko/1.Workshop/aiinfra/07Application'
+dir_paths = '/home/gecko/1.Workshop/aiinfra_BOOK/source/'
 
 getallfile(target_dir0)
 getallfile(target_dir1)
