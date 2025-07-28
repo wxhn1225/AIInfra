@@ -136,7 +136,7 @@ if __name__ == "__main__":
             moe.train()
             output, loss = moe(x)
             print(f"Output shape: {output.shape}")      # torch.Size([64, 256])
-            print(f"Auxiliary loss: {loss.item():.4f}") # 示例值，如0.1234
+            print(f"Auxiliary loss: {loss.item():.4f}") # 示例值，如 0.1234
             prof.step()
     # 推理模式
     moe.eval()

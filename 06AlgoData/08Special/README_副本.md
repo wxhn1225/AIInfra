@@ -10,9 +10,9 @@ ChatGPT 是由 OpenAI 开发的一种基于 GPT（生成式预训练变换器）
 
 | 大纲 | 小节 | 链接|
 |:-- |:-- |:-- |
-| ChatGPT 解读 | ChatGPT 1：GPT系列家族详解 | [PPT](./01ChatGPT01.pdf), [视频](https://www.bilibili.com/video/BV1kv4y1s7V7) |
-| ChatGPT 解读 | ChatGPT 2：强化学习RLHF和PPO算法 | [PPT](./01ChatGPT02.pdf), [视频](https://www.bilibili.com/video/BV1eT411S7Yx) |
-| ChatGPT 解读 | ChatGPT 3：InstructGPT解析 | [PPT](./01ChatGPT03.pdf), [视频](https://www.bilibili.com/video/BV1e24y1s7k8) |
+| ChatGPT 解读 | ChatGPT 1：GPT 系列家族详解 | [PPT](./01ChatGPT01.pdf), [视频](https://www.bilibili.com/video/BV1kv4y1s7V7) |
+| ChatGPT 解读 | ChatGPT 2：强化学习 RLHF 和 PPO 算法 | [PPT](./01ChatGPT02.pdf), [视频](https://www.bilibili.com/video/BV1eT411S7Yx) |
+| ChatGPT 解读 | ChatGPT 3：InstructGPT 解析 | [PPT](./01ChatGPT03.pdf), [视频](https://www.bilibili.com/video/BV1e24y1s7k8) |
 
 ## 备注
 

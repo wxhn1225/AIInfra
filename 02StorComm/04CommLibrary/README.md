@@ -12,13 +12,13 @@ MPI 是集合通信库的鼻祖，英伟达 NVIDIA 大量的参考和借鉴 MPI 
 
 | 大纲 | 小节 | 链接 |
 |:--:|:--:|:--:|
-| 集合通信库 | 01 通信库基础MPI介绍 | [PPT](./01MPIIntro.pdf), [视频]() |
-| 集合通信库 | 02 02 业界XCCL大串烧(上) | [PPT](./02XCCL.pdf), [视频]() |
-| 集合通信库 | 03 02 业界XCCL大串烧(下) | [PPT](./03XCCL.pdf), [视频]() |
+| 集合通信库 | 01 通信库基础 MPI 介绍 | [PPT](./01MPIIntro.pdf), [视频]() |
+| 集合通信库 | 02 02 业界 XCCL 大串烧(上) | [PPT](./02XCCL.pdf), [视频]() |
+| 集合通信库 | 03 02 业界 XCCL 大串烧(下) | [PPT](./03XCCL.pdf), [视频]() |
 | 集合通信库 | 04 英伟达 NCCL 原理剖析 | [PPT](./04NCCLIntro.pdf), [视频]() |
-| 集合通信库 | 05 英伟达 NCCL API介绍 | [PPT](./05NCCLAPI.pdf), [视频]() |
-| 集合通信库 | 06 NCCL通信算法与拓扑关系 | [PPT](./06NCCLPXN.pdf), [视频]() |
-| 集合通信库 | 07 NCCL双二叉树算法原理 | [PPT](./07DBTree.pdf), [视频]() |
+| 集合通信库 | 05 英伟达 NCCL API 介绍 | [PPT](./05NCCLAPI.pdf), [视频]() |
+| 集合通信库 | 06 NCCL 通信算法与拓扑关系 | [PPT](./06NCCLPXN.pdf), [视频]() |
+| 集合通信库 | 07 NCCL 双二叉树算法原理 | [PPT](./07DBTree.pdf), [视频]() |
 | 集合通信库 | 08 华为 HCCL 架构介绍 | [PPT](./08HCCLIntro.pdf), [视频]() |
 | 集合通信库 | 09 华为 HCCL 拓扑算法 | [PPT](./09HCCLOpt.pdf), [视频]() |
 | 集合通信库 | 10 通信模型&通信影响 | [PPT](./10Summary.pdf), [视频]() |
